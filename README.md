@@ -73,7 +73,7 @@ The application follows a modular and scalable architecture. A system architectu
 | Firestore         | Store data for products, orders, users |
 | Firebase Storage  | Store product images               |
 | Cloud Functions   | (Planned) Backend automation tasks |
-| Firebase Hosting  | (Optional) Frontend deployment     |
+| Firebase Hosting  | Frontend deployment     |
 
 ---
 
