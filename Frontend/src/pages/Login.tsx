@@ -26,7 +26,6 @@ export default function Login() {
         <input className="input mt-4" placeholder="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <input className="input mt-3" placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button className="btn-primary mt-4 w-full">Login</button>
-        <Link to="/login" className="px-4 py-2 bg-blue-600 text-white rounded-lg">Login</Link>
         <div className="mt-3 text-center text-sm text-gray-600">
           <Link to="/reset-password" className="hover:text-primary">Forgot password?</Link>
         </div>
