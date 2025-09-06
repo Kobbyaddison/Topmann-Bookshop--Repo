@@ -10,7 +10,7 @@ function required(name: string): string {
 export const env = {
   NODE_ENV: process.env.NODE_ENV ?? 'development',
   PORT: Number(process.env.PORT ?? 8080),
-  CLIENT_URL: process.env.CLIENT_URL ?? 'http://localhost:5173',
+  CLIENT_URL: process.env.CLIENT_URL ?? 'http://localhost:3000',
   MONGO_URI: required('MONGO_URI'),
   JWT_ACCESS_SECRET: required('JWT_ACCESS_SECRET'),
   JWT_REFRESH_SECRET: required('JWT_REFRESH_SECRET'),

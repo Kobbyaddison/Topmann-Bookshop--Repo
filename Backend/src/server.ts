@@ -19,10 +19,10 @@ const app = express();
 app.use('/api/webhooks', express.raw({ type: 'application/json' }), webhookRouter);
 
 app.use(helmet());
-app.use(cors({ origin: env.CLIENT_URL, credentials: true }));
+app.use(cors({ origin: env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
 app.use(morgan('dev'));
 app.use(cookieParser());
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
