@@ -12,6 +12,11 @@ import productRoutes from './routes/product.routes.js';
 import cartRoutes from './routes/cart.routes.js';
 import orderRoutes, { webhookRouter } from './routes/order.routes.js';
 import contentRoutes from './routes/content.routes.js';
+import path from 'path';
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -33,6 +38,9 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/content', contentRoutes);
+
+// Serve product images
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
 
 app.use(notFound);
 app.use(errorHandler);

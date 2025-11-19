@@ -53,3 +53,64 @@ export const categories = async (_req: Request, res: Response) => {
   const list = await Category.find().sort({ name: 1 });
   res.json(list);
 };
+
+import fs from 'fs';
+import path from 'path';
+
+export const seedProducts = async (req: Request, res: Response) => {
+  try {
+    // 1. Path to backend images folder
+    const imageDir = path.join(__dirname, '../../public/product-images');
+
+    // 2. Read all image filenames
+    const images = fs.readdirSync(imageDir).filter(file =>
+      /\.(png|jpg|jpeg|webp)$/i.test(file)
+    );
+
+    if (images.length === 0) {
+      return res.status(500).json({ message: "No images found in backend product-images folder" });
+    }
+
+    // 3. Helper to pick a random image
+    const randomImage = () => images[Math.floor(Math.random() * images.length)];
+
+    // 4. Create sample products
+    const sampleProducts = [
+      {
+        name: 'Blue Ballpoint Pen',
+        price: 2.5,
+        image: randomImage(),
+        category: 'Writing',
+        description: 'Smooth writing ballpoint pen.'
+      },
+      {
+        name: 'A4 Notebook',
+        price: 10.0,
+        image: randomImage(),
+        category: 'Stationery',
+        description: '120-page A4 notebook.'
+      },
+      {
+        name: 'Stapler',
+        price: 15.0,
+        image: randomImage(),
+        category: 'Office Supplies',
+        description: 'High-quality metal stapler.'
+      }
+    ];
+
+    await Product.deleteMany();
+    const created = await Product.insertMany(sampleProducts);
+
+    return res.json({
+      message: 'Products seeded with random images',
+      imagesUsed: images,
+      productsCreated: created
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Seeding failed' });
+  }
+};
+
