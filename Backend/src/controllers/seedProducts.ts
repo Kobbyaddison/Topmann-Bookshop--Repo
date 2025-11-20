@@ -1,28 +1,38 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import axios from "axios";
 import Product from "../models/Product.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 export const seedProducts = async () => {
   try {
-    const assetsPath = path.join(__dirname, "../assets/products");
-    const files = fs.readdirSync(assetsPath);
+    const API_KEY = process.env.PIXABAY_KEY;
 
-    const products = Array.from({ length: 10 }).map((_, idx) => {
-      const randomImage = files[Math.floor(Math.random() * files.length)];
+    const getRandomImage = async () => {
+      const q = ["books", "stationery", "pencils", "office"].sort(() => 0.5 - Math.random())[0];
 
-      return {
-        name: `Product ${idx + 1}`,
+      const res = await axios.get(
+        `https://pixabay.com/api/?key=${API_KEY}&q=${q}&image_type=photo&per_page=50`
+      );
+
+      const hits = res.data.hits;
+      if (!hits.length) return null;
+
+      const random = hits[Math.floor(Math.random() * hits.length)];
+      return random.largeImageURL;
+    };
+
+    const products = [];
+
+    for (let i = 0; i < 10; i++) {
+      const img = await getRandomImage();
+
+      products.push({
+        name: `Product ${i + 1}`,
         price: Number((Math.random() * 100).toFixed(2)),
-        image: `/assets/products/${randomImage}`, // served statically
-      };
-    });
+        image: img,
+      });
+    }
 
     await Product.insertMany(products);
-    console.log("Products seeded!");
+    console.log("Seeded with Pixabay images!");
   } catch (err) {
     console.error(err);
   }
